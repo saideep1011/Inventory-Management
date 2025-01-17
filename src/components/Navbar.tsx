@@ -3,7 +3,10 @@ import React from "react";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="bg-black text-white p-4 fixed top-0 left-0 right-0 z-10">
+    <nav
+      className="bg-black text-white p-4 fixed top-0 left-0 right-0 z-10"
+      style={{ backgroundColor: "#161718" }}
+    >
       <div className="flex items-center justify-between ">
         <h1 className="text-xl font-bold  w-full flex items-start justify-end">
           Inventory Management

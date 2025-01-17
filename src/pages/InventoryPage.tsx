@@ -43,33 +43,138 @@ const InventoryPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen mt-[4rem] bg-gray-800">
-      <h2 className="text-3xl font-bold text-center mb-4 text-white">
-        Inventory Page
-      </h2>
+    <div
+      className="min-h-screen mt-[4rem] "
+      style={{ backgroundColor: "#161718" }}
+    >
       {loading && <p className="text-center text-white">Loading...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
       <div className="p-4">
-        <ul>
-          {inventory.length > 0 ? (
-            inventory.map((item, index) => (
-              <li
-                key={index}
-                className="mb-2 p-4 border rounded-lg shadow-md bg-white"
-              >
-                <h3 className="font-semibold">{item.name}</h3>
-                <p>{item.description}</p>
-                <p className="text-sm text-gray-500">
-                  Quantity: {item.quantity}
-                </p>
-              </li>
-            ))
-          ) : (
-            <p className="text-center text-white">
-              No inventory items available.
+        <h2 className="text-3xl font-bold text-start mb-4 text-white">
+          Inventory Stats
+        </h2>
+        <div className="flex flex-row gap-x-2 mb-[12px]">
+          <div
+            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            style={{ backgroundColor: "#243325" }}
+          >
+            <h4 className="text-sm font-medium text-white">Total Products</h4>
+            <p className="text-2xl font-semibold">{inventory.length}</p>
+          </div>
+          <div
+            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            style={{ backgroundColor: "#243325" }}
+          >
+            <h4 className="text-sm font-medium text-white">
+              Total Store Value
+            </h4>
+            <p className="text-2xl font-semibold">
+              {inventory
+                .reduce(
+                  (total, item) =>
+                    total + parseFloat(item.value.replace("$", "")),
+                  0
+                )
+                .toFixed(2)}
             </p>
-          )}
-        </ul>
+          </div>
+          <div
+            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            style={{ backgroundColor: "#243325" }}
+          >
+            <h4 className="text-sm font-medium text-white">
+              Total Out of Stock
+            </h4>
+            <p className="text-2xl font-semibold">
+              {inventory.filter((item) => item.quantity === 0).length}
+            </p>
+          </div>
+          <div
+            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            style={{ backgroundColor: "#243325" }}
+          >
+            <h4 className="text-sm font-medium text-white">
+              Number of Categories
+            </h4>
+            <p className="text-2xl font-semibold">
+              {
+                Array.from(new Set(inventory.map((item) => item.category)))
+                  .length
+              }
+            </p>
+          </div>
+        </div>
+        <table
+          className="min-w-full table-auto border-collapse border border-gray-300 text-white rounded-[4px] "
+          style={{ backgroundColor: "#212124" }}
+        >
+          <thead className="rounded-[4px]">
+            <tr>
+              <th className="px-4 py-5 border-b border-gray-300 text-left">
+                <span className="bg-black text-yellow-500 px-3 py-2  rounded-[4px] text-sm font-medium inline-block">
+                  Name
+                </span>
+              </th>
+              <th className="px-4 py-5 border-b border-gray-300 text-left">
+                <span className="bg-black text-yellow-500 px-3 py-2  rounded-[4px] text-sm font-medium inline-block">
+                  Category
+                </span>
+              </th>
+              <th className="px-4 py-5 border-b border-gray-300 text-left">
+                <span className="bg-black text-yellow-500 px-3 py-2  rounded-[4px] text-sm font-medium inline-block">
+                  Price
+                </span>
+              </th>
+              <th className="px-4 py-5 border-b border-gray-300 text-left">
+                <span className="bg-black text-yellow-500 px-3 py-2  rounded-[4px] text-sm font-medium inline-block">
+                  Quantity
+                </span>
+              </th>
+              <th className="px-4 py-5 border-b border-gray-300 text-left">
+                <span className="bg-black text-yellow-500 px-3 py-2  rounded-[4px] text-sm font-medium inline-block">
+                  Value
+                </span>
+              </th>
+              <th className="px-4 py-5 border-b border-gray-300 text-left">
+                <span className="bg-black text-yellow-500 px-3 py-2  rounded-[4px] text-sm font-medium inline-block">
+                  Action
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody className="rounded-[4px]">
+            {inventory.length > 0 ? (
+              inventory.map((item, index) => (
+                <tr key={index}>
+                  <td className="px-4 py-4 border-b border-gray-300 rounded-[4px]">
+                    {item.name}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
+                    {item.category}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
+                    {item.price}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
+                    {item.quantity}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
+                    {item.value}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
+                    <button className="text-blue-500">Edit</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center text-white px-4 py-2">
+                  No inventory items available.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
