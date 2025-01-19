@@ -164,7 +164,17 @@ const InventoryPage: React.FC = () => {
                     {item.value}
                   </td>
                   <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
-                    <button className="text-blue-500">Edit</button>
+                    <div className="flex space-x-2">
+                      <button className="text-blue-500">
+                        <i className="fa fa-edit"></i>
+                      </button>
+                      <button className="text-red-500">
+                        <i className="fa fa-trash"></i>
+                      </button>
+                      <button className="text-gray-500">
+                        <i className="fa fa-eye"></i>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
