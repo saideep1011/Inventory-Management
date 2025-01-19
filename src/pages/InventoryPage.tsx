@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const InventoryPage: React.FC = () => {
   const [inventory, setInventory] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const userType = useSelector((state: any) => state.user.userType);
+  console.log(userType, "type of user.....");
   // Delay function for retry logic
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
