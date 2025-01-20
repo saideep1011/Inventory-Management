@@ -108,53 +108,83 @@ const InventoryPage: React.FC = () => {
         </h2>
         <div className="flex flex-row gap-x-2 mb-[12px]">
           <div
-            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            className="p-8 border rounded-lg w-[25%] flex items-center justify-center flex-col shadow-md text-white"
             style={{ backgroundColor: "#243325" }}
           >
-            <h4 className="text-sm font-medium text-white">Total Products</h4>
-            <p className="text-2xl font-semibold">{inventory.length}</p>
+            <div className="flex items-center">
+              <i
+                className="fa fa-shopping-cart text-2xl"
+                aria-hidden="true"
+              ></i>
+              <div className="ml-4 flex flex-col items-center">
+                {" "}
+                {/* Added margin-left for spacing */}
+                <h4 className="text-sm font-medium text-white">
+                  Total Products
+                </h4>
+                <p className="text-2xl font-semibold">{inventory.length}</p>
+              </div>
+            </div>
           </div>
+
           <div
-            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            className="p-8 border rounded-lg w-[25%] flex items-center justify-center flex-col shadow-md text-white"
             style={{ backgroundColor: "#243325" }}
           >
-            <h4 className="text-sm font-medium text-white">
-              Total Store Value
-            </h4>
-            <p className="text-2xl font-semibold">
-              {inventory
-                .reduce(
-                  (total, item) =>
-                    total + parseFloat(item.value.replace("$", "")),
-                  0
-                )
-                .toFixed(2)}
-            </p>
+            <div className="flex items-center">
+              <i className="fa fa-usd text-2xl" aria-hidden="true"></i>
+              <div className="ml-4 flex flex-col items-center">
+                <h4 className="text-sm font-medium text-white">
+                  Total Store Value
+                </h4>
+                <p className="text-2xl font-semibold">
+                  {inventory
+                    .reduce(
+                      (total, item) =>
+                        total + parseFloat(item.value.replace("$", "")),
+                      0
+                    )
+                    .toFixed(2)}
+                </p>
+              </div>
+            </div>
           </div>
+
           <div
-            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            className="p-8 border rounded-lg w-[25%] flex items-center justify-center flex-col shadow-md text-white"
             style={{ backgroundColor: "#243325" }}
           >
-            <h4 className="text-sm font-medium text-white">
-              Total Out of Stock
-            </h4>
-            <p className="text-2xl font-semibold">
-              {inventory.filter((item) => item.quantity === 0).length}
-            </p>
+            <div className="flex items-center">
+              <i className="fa fa-ban text-2xl" aria-hidden="true"></i>
+              <div className="ml-4 flex flex-col items-center">
+                <h4 className="text-sm font-medium text-white">
+                  Total Out of Stock
+                </h4>
+                <p className="text-2xl font-semibold">
+                  {inventory.filter((item) => item.quantity === 0).length}
+                </p>
+              </div>
+            </div>
           </div>
+
           <div
-            className="p-8 border rounded-lg w-[25%] flex justify-center items-center flex-col shadow-md text-white"
+            className="p-8 border rounded-lg w-[25%] flex items-center justify-center flex-col shadow-md text-white"
             style={{ backgroundColor: "#243325" }}
           >
-            <h4 className="text-sm font-medium text-white">
-              Number of Categories
-            </h4>
-            <p className="text-2xl font-semibold">
-              {
-                Array.from(new Set(inventory.map((item) => item.category)))
-                  .length
-              }
-            </p>
+            <div className="flex items-center">
+              <i className="fa fa-tag text-2xl" aria-hidden="true"></i>
+              <div className="ml-4 flex flex-col items-center">
+                <h4 className="text-sm font-medium text-white">
+                  Number of Categories
+                </h4>
+                <p className="text-2xl font-semibold">
+                  {
+                    Array.from(new Set(inventory.map((item) => item.category)))
+                      .length
+                  }
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <table
@@ -274,60 +304,87 @@ const InventoryPage: React.FC = () => {
       {/* Edit Modal */}
       {isModalOpen && selectedItem && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-1/3">
-            <h3 className="text-xl font-semibold mb-4">Edit Product</h3>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Category</label>
-              <input
-                type="text"
-                value={selectedItem.category}
-                onChange={(e) =>
-                  setSelectedItem({ ...selectedItem, category: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              />
+          <div
+            className="bg-white p-6 rounded-lg w-1/3"
+            style={{ backgroundColor: "#243325" }}
+          >
+            <h3 className="text-xl font-semibold mb-4 text-white flex justify-between items-center">
+              Edit Product
+              <button onClick={handleCloseModal} className="text-white">
+                <i className="fas fa-times text-2xl"></i>
+              </button>
+            </h3>
+
+            <div className="flex flex-row w-[100%] justify-between">
+              <div className="mb-4 text-white w-[49%]">
+                <label className="block text-sm font-medium mb-2">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  value={selectedItem.category}
+                  onChange={(e) =>
+                    setSelectedItem({
+                      ...selectedItem,
+                      category: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 border rounded text-black"
+                />
+              </div>
+              <div className="mb-4 text-white w-[49%]">
+                <label className="block text-sm font-medium mb-2">Price</label>
+                <input
+                  type="number"
+                  value={selectedItem.price}
+                  onChange={(e) =>
+                    setSelectedItem({ ...selectedItem, price: e.target.value })
+                  }
+                  className="w-full p-2 border rounded text-black"
+                />
+              </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Price</label>
-              <input
-                type="number"
-                value={selectedItem.price}
-                onChange={(e) =>
-                  setSelectedItem({ ...selectedItem, price: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              />
+            <div className="flex flex-row w-[100%] justify-between">
+              <div className="mb-4 text-white w-[49%]">
+                <label className="block text-sm font-medium mb-2">
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  value={selectedItem.quantity}
+                  onChange={(e) =>
+                    setSelectedItem({
+                      ...selectedItem,
+                      quantity: e.target.value,
+                    })
+                  }
+                  className="w-full p-2 border rounded text-black"
+                />
+              </div>
+              <div className="mb-4 text-white w-[49%]">
+                <label className="block text-sm font-medium mb-2">Value</label>
+                <input
+                  type="text"
+                  value={
+                    parseFloat(selectedItem.price) *
+                    parseInt(selectedItem.quantity)
+                  }
+                  readOnly
+                  className="w-full p-2 border rounded text-black"
+                />
+              </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Quantity</label>
-              <input
-                type="number"
-                value={selectedItem.quantity}
-                onChange={(e) =>
-                  setSelectedItem({ ...selectedItem, quantity: e.target.value })
-                }
-                className="w-full p-2 border rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Value</label>
-              <input
-                type="text"
-                value={
-                  parseFloat(selectedItem.price) *
-                  parseInt(selectedItem.quantity)
-                }
-                readOnly
-                className="w-full p-2 border rounded"
-              />
-            </div>
+
             <div className="flex justify-end space-x-2">
-              <button onClick={handleCloseModal} className="text-gray-500">
+              <button
+                onClick={handleCloseModal}
+                className="bg-black text-yellow-500 p-2 rounded-[8px]"
+              >
                 Cancel
               </button>
               <button
                 onClick={handleSaveChanges}
-                className="bg-blue-500 text-white p-2 rounded"
+                className="bg-black text-yellow-500 p-2 rounded-[8px]"
               >
                 Save
               </button>
