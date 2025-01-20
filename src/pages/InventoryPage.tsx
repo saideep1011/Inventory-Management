@@ -7,11 +7,10 @@ const InventoryPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [disabledRows, setDisabledRows] = useState<Set<string>>(new Set());
-  const [selectedItem, setSelectedItem] = useState<any | null>(null); // State for selected item
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const userType = useSelector((state: any) => state.user.userType);
 
-  // Delay function for retry logic
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -44,51 +43,53 @@ const InventoryPage: React.FC = () => {
     retryFetch();
   }, []);
 
-  // Handle edit button click
-  const handleEdit = (index: number) => {
-    const editedItem = { ...inventory[index] }; // Copy the selected item to preserve the original data
-    setSelectedItem({
-      ...editedItem,
-      price: editedItem.price || "0", // Set default price to 0 if it's empty or null
-      quantity: editedItem.quantity || "0", // Set default quantity to 0 if it's empty or null
-    });
-    setIsModalOpen(true); // Open modal
-  };
-
-  const handleSaveChanges = () => {
-    // Recalculate value based on price * quantity, ensuring they are numbers
-    const updatedItem = {
-      ...selectedItem,
-      value: (
-        parseFloat(selectedItem.price || "0") *
-        parseInt(selectedItem.quantity || "0")
-      ).toFixed(2), // Use 0 as default if the price or quantity is missing
-    };
-
-    const updatedInventory = inventory.map((item) =>
-      item.name === selectedItem.name ? updatedItem : item
-    );
-    setInventory(updatedInventory); // Update inventory state
-    setIsModalOpen(false); // Close modal
-  };
-
-  // Handle modal close
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedItem(null); // Clear selected item
+    setSelectedItem(null);
   };
 
-  // Handle save changes
-
-  // Function to handle deleting an inventory item
   const handleDelete = (itemName: string) => {
     setInventory((prev) => prev.filter((item) => item.name !== itemName));
     setDisabledRows((prev) => new Set(Array.from(prev).concat(itemName))); // Disable the row
   };
 
-  // Function to handle eye icon click to disable row visually
   const handleDisableRow = (itemName: string) => {
     setDisabledRows((prev) => new Set(prev.add(itemName)));
+  };
+  const handleEdit = (index: number) => {
+    const editedItem = { ...inventory[index] };
+
+    const price = editedItem.price ? editedItem.price.replace("$", "") : "0";
+    const quantity =
+      editedItem.quantity !== null && editedItem.quantity !== undefined
+        ? editedItem.quantity
+        : "0";
+
+    console.log(price, "item");
+
+    setSelectedItem({
+      ...editedItem,
+      price: price,
+      quantity: quantity,
+    });
+
+    setIsModalOpen(true);
+  };
+
+  const handleSaveChanges = () => {
+    const updatedItem = {
+      ...selectedItem,
+      value: (
+        parseFloat(selectedItem.price || "0") *
+        parseInt(selectedItem.quantity || "0")
+      ).toFixed(2),
+    };
+
+    const updatedInventory = inventory.map((item) =>
+      item.name === selectedItem.name ? updatedItem : item
+    );
+    setInventory(updatedInventory);
+    setIsModalOpen(false);
   };
 
   return (
