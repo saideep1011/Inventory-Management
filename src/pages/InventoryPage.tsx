@@ -57,6 +57,7 @@ const InventoryPage: React.FC = () => {
     setDisabledRows((prev) => new Set(prev.add(itemName)));
   };
   const handleEdit = (index: number) => {
+    setIsModalOpen(true);
     const editedItem = { ...inventory[index] };
 
     const price = editedItem.price ? editedItem.price.replace("$", "") : "0";
@@ -72,8 +73,6 @@ const InventoryPage: React.FC = () => {
       price: price,
       quantity: quantity,
     });
-
-    setIsModalOpen(true);
   };
 
   const handleSaveChanges = () => {
@@ -91,7 +90,11 @@ const InventoryPage: React.FC = () => {
     setInventory(updatedInventory);
     setIsModalOpen(false);
   };
-
+  useEffect(() => {
+    if (userType === "user") {
+      setIsModalOpen(false);
+    }
+  }, [userType, isModalOpen]);
   return (
     <div
       className="min-h-screen mt-[4rem]"
@@ -221,20 +224,35 @@ const InventoryPage: React.FC = () => {
                   <td className="px-4 py-2 border-b border-gray-300 rounded-[4px]">
                     <div className="flex space-x-2">
                       <button
-                        className="text-blue-500"
+                        className={`text-blue-500 ${
+                          userType === "user"
+                            ? "cursor-not-allowed opacity-50"
+                            : ""
+                        }`}
                         onClick={() => handleEdit(index)}
+                        disabled={userType === "user"}
                       >
                         <i className="fa fa-edit"></i>
                       </button>
                       <button
-                        className="text-red-500"
+                        className={`text-red-500 ${
+                          userType === "user"
+                            ? "cursor-not-allowed opacity-50"
+                            : ""
+                        }`}
                         onClick={() => handleDelete(item.name)}
+                        disabled={userType === "user"}
                       >
                         <i className="fa fa-trash"></i>
                       </button>
                       <button
-                        className="text-gray-500"
+                        className={`text-gray-500 ${
+                          userType === "user"
+                            ? "cursor-not-allowed opacity-50"
+                            : ""
+                        }`}
                         onClick={() => handleDisableRow(item.name)}
+                        disabled={userType === "user"}
                       >
                         <i className="fa fa-eye"></i>
                       </button>
